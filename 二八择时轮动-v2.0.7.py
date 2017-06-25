@@ -315,7 +315,7 @@ def do_handle_data(context, data):
         g.day_count += 1
 
 def market_stop_loss_by_price(context, index):
-    # 大盘指数前130日内最高价超过最低价2倍，则清仓止损
+    # 大盘指数前160日内最高价超过最低价2倍，则清仓止损
     # 基于历史数据判定，因此若状态满足，则当天都不会变化
     # 增加此止损，回撤降低，收益降低
 
@@ -684,7 +684,8 @@ def pick_stocks(context, data):
             indicator.eps > g.min_eps,
             #valuation.turnover_ratio > 3
             )
-
+        
+    # 按照市值升序排列
     q = q.order_by(
                 valuation.market_cap.asc()
             ).limit(
@@ -720,6 +721,8 @@ def pick_stocks(context, data):
     # 选取指定可买数目的股票
     if len(stock_list) > g.buy_stock_count:
         stock_list = stock_list[:g.buy_stock_count]
+    
+    #最终选出了分数最低的g.buy_stock_count支股票
     return stock_list
 
 # 根据待买股票创建或调整仓位
